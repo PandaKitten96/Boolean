@@ -13,7 +13,7 @@
 -- Maintainer  :  jbra@informatik.uni-kiel.de
 -- Stability   :  experimental
 -- 
--- A generalized version of the class hirarchy for numbers. All
+-- | A generalized version of the class hierarchy for numbers. All
 -- functions that would break a potential deep embedding are removed
 -- or generalized to support deep embeddings.
 -- 
@@ -58,14 +58,14 @@ infixr 9 .:
 (f ## g) x y = (f x y, g x y)
 
 -- -----------------------------------------------------------------------
--- Generalized Number Class Hirarchy
+-- Generalized Number Class Hierarchy
 -- -----------------------------------------------------------------------
 
 -- | An extension of 'Num' that supplies the integer type of a 
 --   given number type and a way to create that number from the 
 --   integer.
 class Num a => NumB a where
-  -- | The accociated integer type of the number.
+  -- | The associated integer type of the number.
   type IntegerOf a
   -- | Construct the number from the associated integer.
   fromIntegerB :: IntegerOf a -> a
@@ -80,7 +80,7 @@ class (NumB a, OrdB a) => IntegralB a where
   -- | Integer division truncated towards zero.
   quot :: a -> a -> a
   quot = fst .: quotRem
-  -- | Integer reminder, satisfying:
+  -- | Integer remainder, satisfying:
   --   @(x `quot` y) * y + (x `rem` y) == x@
   rem :: a -> a -> a
   rem = snd .: quotRem
@@ -97,7 +97,7 @@ class (NumB a, OrdB a) => IntegralB a where
   -- | Simultaneous 'div' and 'mod'.
   divMod :: a -> a -> (a,a)
   divMod  = div ## mod
-  -- | Create a integer from this integral.
+  -- | Create an integer from this integral.
   toIntegerB :: a -> IntegerOf a
 
 -- | Deep embedded version of 'RealFloat'.
@@ -158,14 +158,17 @@ class (Boolean (BooleanOf a), RealFracB a, Floating a) => RealFloatB a where
 -- | Variant of 'even' for generalized booleans.
 evenB :: (IfB a, EqB a, IntegralB a) => a -> BooleanOf a
 evenB n = n `rem` 2 ==* 0
+{-# INLINE evenB #-}
 
 -- | Variant of 'odd' for generalized booleans.
 oddB :: (IfB a, EqB a, IntegralB a) => a -> BooleanOf a
 oddB = notB . evenB
+{-# INLINE oddB #-}
 
 -- | Variant of 'fromIntegral' for generalized booleans.
 fromIntegralB :: (IntegerOf a ~ IntegerOf b, IntegralB a, NumB b) => a -> b
 fromIntegralB = fromIntegerB . toIntegerB
+{-# INLINE fromIntegralB #-}
 
 -- -----------------------------------------------------------------------
 -- Default Class Instances for Basic Types

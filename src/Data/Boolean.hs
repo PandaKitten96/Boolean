@@ -9,8 +9,6 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-{-# OPTIONS_GHC -fno-warn-unused-imports #-} -- TEMP
-
 ----------------------------------------------------------------------
 -- |
 -- Module      :  Data.Boolean
@@ -71,7 +69,7 @@ instance Boolean Bool where
   (&&*) = (&&)
   (||*) = (||)
 
--- | 'BooleanOf' computed the boolean analog of a specific type.
+-- | 'BooleanOf' computes the boolean analog of a specific type.
 type family BooleanOf a
 
 -- | Types with conditionals
@@ -81,14 +79,17 @@ class Boolean (BooleanOf a) => IfB a where
 -- | Expression-lifted conditional with condition last
 boolean :: (IfB a, bool ~ BooleanOf a) => a -> a -> bool -> a
 boolean t e bool = ifB bool t e
+{-# INLINE boolean #-}
 
 -- | Point-wise conditional
 cond :: (Applicative f, IfB a, bool ~ BooleanOf a) => f bool -> f a -> f a -> f a
 cond = liftA3 ifB
+{-# INLINE cond #-}
 
 -- | Generalized cropping, filling in 'mempty' where the test yields false.
 crop :: (Applicative f, Monoid (f a), IfB a, bool ~ BooleanOf a) => f bool -> f a -> f a
 crop r f = cond r f mempty
+{-# INLINE crop #-}
 
 -- | A generalized replacement for guards and chained ifs.
 guardedB :: (IfB b, bool ~ BooleanOf b) => bool -> [(bool,b)] -> b -> b
@@ -119,14 +120,17 @@ class Boolean (BooleanOf a) => OrdB a where
 -- | Variant of 'min' using 'ifB' and '(<=*)'
 minB :: (IfB a, OrdB a) => a -> a -> a
 u `minB` v = ifB (u <=* v) u v
+{-# INLINE minB #-}
 
 -- | Variant of 'max' using 'ifB' and '(>=*)'
 maxB :: (IfB a, OrdB a) => a -> a -> a
 u `maxB` v = ifB (u >=* v) u v
+{-# INLINE maxB #-}
 
 -- | Variant of 'min' and 'max' using 'ifB' and '(<=*)'
 sort2B :: (IfB a, OrdB a) => (a,a) -> (a,a)
 sort2B (u,v) = ifB (u <=* v) (u,v) (v,u)
+{-# INLINE sort2B #-}
 
 
 
@@ -137,6 +141,7 @@ sort2B (u,v) = ifB (u <=* v) (u,v) (v,u)
 -- Simple if-then-else as function.
 ife :: Bool -> a -> a -> a
 ife c t e = if c then t else e
+{-# INLINE ife #-}
 
 -- I'd give the following instances:
 --
@@ -168,6 +173,10 @@ SimpleTy(Char)
 
 -- TODO: Export these macros for external use. I guess I'd want a .h file as in
 -- the applicative-numbers package.
+
+type instance BooleanOf (Maybe a) = BooleanOf a
+
+instance (Boolean (BooleanOf a), BooleanOf a ~ Bool) => IfB (Maybe a) where { ifB = ife }
 
 type instance BooleanOf [a]       = BooleanOf a
 type instance BooleanOf (a,b)     = BooleanOf a
@@ -216,22 +225,3 @@ instance OrdB a => OrdB (z -> a) where
 
 -- TODO: Generalize the function instance into a macro for arbitrary
 -- applicatives. Instantiate for functions.
-
-{-
-
-{--------------------------------------------------------------------
-    Tests
---------------------------------------------------------------------}
-
-t1 :: String
-t1 = ifB True "foo" "bar"
-
-t2 :: Float -> Float
-t2 = ifB (< 0) negate id
-
---     No instance for (IfB (a -> Bool) (a1 -> a1))
---       arising from a use of `ifB'
---
--- t2 = ifB (< 0) negate id                -- abs
-
--}

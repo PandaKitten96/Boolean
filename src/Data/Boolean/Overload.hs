@@ -44,37 +44,44 @@ infixr 2 ||
 
 (&&) :: Boolean a => a -> a -> a
 (&&) = (&&*)
+{-# INLINE (&&) #-}
 
 (||) :: Boolean a => a -> a -> a
 (||) = (||*)
+{-# INLINE (||) #-}
 
 not :: Boolean a => a -> a
 not = notB
-
+{-# INLINE not #-}
 
 -- For use with RebindableSyntax
 ifThenElse :: IfB a => BooleanOf a -> a -> a -> a
 ifThenElse = ifB
-
+{-# INLINE ifThenElse #-}
 
 (==) :: EqB a => a -> a -> BooleanOf a
 (==) = (==*)
+{-# INLINE (==) #-}
 (/=) :: EqB a => a -> a -> BooleanOf a
 (/=) = (/=*)
-
+{-# INLINE (/=) #-}
 
 (<) :: OrdB a => a -> a -> BooleanOf a
 (<) = (<*)
+{-# INLINE (<) #-}
 (>) :: OrdB a => a -> a -> BooleanOf a
 (>) = (>*)
+{-# INLINE (>) #-}
 (<=) :: OrdB a => a -> a -> BooleanOf a
 (<=) = (<=*)
+{-# INLINE (<=) #-}
 (>=) :: OrdB a => a -> a -> BooleanOf a
 (>=) = (>=*)
+{-# INLINE (>=) #-}
 
 min :: (IfB a, OrdB a) => a -> a -> a
 min = minB
+{-# INLINE min #-}
 max :: (IfB a, OrdB a) => a -> a -> a
 max = maxB
-
-
+{-# INLINE max #-}
