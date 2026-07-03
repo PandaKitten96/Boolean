@@ -29,7 +29,7 @@ Thank you for your interest in contributing to the Boolean Haskell library!
 ## Submitting a Pull Request
 
 1. Push your changes to your fork.
-2. Open a pull request against the `main` branch of this repository.
+2. Open a pull request against the `master` branch of this repository.
 3. Describe what you changed and why.
 
 ## Legal

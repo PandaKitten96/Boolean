@@ -240,6 +240,9 @@ jobs:
       - name: build
         run: |
           $CABAL v2-build $ARG_COMPILER $ARG_TESTS $ARG_BENCH all --write-ghc-environment-files=always
+      - name: test
+        run: |
+          $CABAL v2-test $ARG_COMPILER $ARG_TESTS all
       - name: cabal check
         run: |
           cd ${PKGDIR_Boolean} || false
@@ -257,3 +260,18 @@ jobs:
         with:
           key: ${{ runner.os }}-${{ matrix.compiler }}-${{ github.sha }}
           path: ~/.cabal/store
+  hlint:
+    name: HLint
+    runs-on: ubuntu-24.04
+    timeout-minutes:
+      15
+    steps:
+      - name: apt-get install
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends hlint
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: run hlint
+        run: |
+          hlint src test
