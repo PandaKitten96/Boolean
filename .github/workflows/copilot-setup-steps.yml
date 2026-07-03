@@ -1,0 +1,48 @@
+name: "Copilot Setup Steps"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install GHCup
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | \
+            BOOTSTRAP_HASKELL_NONINTERACTIVE=1 \
+            BOOTSTRAP_HASKELL_MINIMAL=1 \
+            sh
+          echo "$HOME/.ghcup/bin" >> "$GITHUB_PATH"
+
+      - name: Install GHC and cabal
+        run: |
+          ghcup install ghc   9.12.2 --set
+          ghcup install cabal latest --set
+
+      - name: Update cabal package index
+        run: cabal update
+
+      - name: Cache cabal store
+        uses: actions/cache@v4
+        with:
+          path: ~/.cabal/store
+          key: ${{ runner.os }}-cabal-${{ hashFiles('Boolean.cabal', 'cabal.project') }}
+          restore-keys: |
+            ${{ runner.os }}-cabal-
+
+      - name: Pre-fetch and build dependencies
+        run: cabal build --only-dependencies --enable-tests all
