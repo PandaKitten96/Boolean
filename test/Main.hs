@@ -1,9 +1,13 @@
 module Main where
 
+import Prelude hiding ((<*))
+
 import Test.Tasty
 import Test.Tasty.HUnit
 
 import Data.Boolean
+import qualified Data.Boolean.Numbers as Numbers
+import qualified Data.Boolean.Overload as Overload
 
 main :: IO ()
 main = defaultMain tests
@@ -19,6 +23,8 @@ tests = testGroup "Boolean"
   , tupleTests
   , maybeTests
   , functionTests
+  , numbersTests
+  , overloadTests
   ]
 
 booleanClassTests :: TestTree
@@ -54,9 +60,9 @@ booleanFnTests = testGroup "boolean / cond / crop"
   , testCase "guardedB: falls through to default" $
       guardedB True [(False, "no")] "default" @?= "default"
   , testCase "caseB: first matching predicate wins" $
-      caseB (5 :: Int) [(> 3, "big"), (< 3, "small")] "medium" @?= "big"
+      caseB (5 :: Int) [((> 3), "big"), ((< 3), "small")] "medium" @?= "big"
   , testCase "caseB: falls through to default" $
-      caseB (3 :: Int) [(> 3, "big"), (< 3, "small")] "medium" @?= "medium"
+      caseB (3 :: Int) [((> 3), "big"), ((< 3), "small")] "medium" @?= "medium"
   ]
 
 eqBTests :: TestTree
@@ -116,13 +122,35 @@ maybeTests = testGroup "Maybe instance"
 functionTests :: TestTree
 functionTests = testGroup "Function instances"
   [ testCase "ifB on function: True branch applied" $
-      (ifB True negate id :: Int -> Int) 5 @?= -5
+      (ifB (const True) negate id :: Int -> Int) 5 @?= -5
   , testCase "ifB on function: False branch applied" $
-      (ifB False negate id :: Int -> Int) 5 @?= 5
+      (ifB (const False) negate id :: Int -> Int) 5 @?= 5
   , testCase "Boolean on function: notB" $
       (notB (> 3) :: Int -> Bool) 5 @?= False
   , testCase "Boolean on function: &&*" $
       ((> 0) &&* (< 10) :: Int -> Bool) 5 @?= True
   , testCase "Boolean on function: &&* both needed" $
       ((> 0) &&* (< 10) :: Int -> Bool) 15 @?= False
+  ]
+
+numbersTests :: TestTree
+numbersTests = testGroup "Data.Boolean.Numbers"
+  [ testCase "evenB for Int" $
+      Numbers.evenB (4 :: Int) @?= True
+  , testCase "oddB for Int" $
+      Numbers.oddB (4 :: Int) @?= False
+  , testCase "fromIntegralB Int -> Double" $
+      (Numbers.fromIntegralB (7 :: Int) :: Double) @?= 7
+  , testCase "IntegralB quot/rem" $
+      (Numbers.quot (7 :: Int) 3, Numbers.rem (7 :: Int) 3) @?= (2, 1)
+  ]
+
+overloadTests :: TestTree
+overloadTests = testGroup "Data.Boolean.Overload"
+  [ testCase "ifThenElse" $
+      Overload.ifThenElse True "yes" "no" @?= ("yes" :: String)
+  , testCase "overloaded min/max" $
+      (Overload.min (2 :: Int) 1, Overload.max (2 :: Int) 1) @?= (1, 2)
+  , testCase "overloaded equality" $
+      (Overload.==) (2 :: Int) 2 @?= True
   ]

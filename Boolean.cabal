@@ -14,6 +14,8 @@ Description:
   Copyright 2009-2013 Conal Elliott; BSD3 license.
 Author:              Conal Elliott
 Maintainer:          PandaKitten96
+Homepage:            https://github.com/PandaKitten96/Boolean
+Bug-Reports:         https://github.com/PandaKitten96/Boolean/issues
 Copyright:           (c) 2009-2013 by Conal Elliott
 License:             BSD3
 License-File:        COPYING
@@ -25,6 +27,7 @@ extra-source-files:  CHANGELOG.md
                    , CONTRIBUTING.md
 
 tested-with:
+  GHC == 9.14.1
   GHC == 9.12.2
   GHC == 9.10.2
   GHC == 9.8.4

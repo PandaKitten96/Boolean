@@ -32,6 +32,13 @@ Thank you for your interest in contributing to the Boolean Haskell library!
 2. Open a pull request against the `main` branch of this repository.
 3. Describe what you changed and why.
 
+## Legal
+
+- By submitting a contribution, you agree your contribution can be distributed
+  under this repository's BSD3 license.
+- Ensure contributed code is your own work or is compatible with BSD3 terms.
+- Do not include secrets, private credentials, or proprietary third-party code.
+
 ## Code of Conduct
 
 Be respectful and constructive in all interactions.
