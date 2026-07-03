@@ -5,17 +5,16 @@
 -- |
 -- Module      :  Data.Boolean.Overload
 -- License     :  BSD3
--- 
--- Author      :  Alex Horsman (aninhumer)
--- Maintainer  :  conal@conal.net
--- Stability   :  experimental
--- 
--- 
--- Definitions of Prelude function names in terms of their corresponding
--- Data.Boolean generalised implementation. This can then be used as part
--- of a partial or complete Prelude replacement.
 --
--- Also exports ifThenElse for use with RebindableSyntax.
+-- Author      :  Alex Horsman (aninhumer)
+-- Maintainer  :  PandaKitten96
+-- Stability   :  experimental
+--
+-- Definitions of standard Prelude function names in terms of their
+-- corresponding 'Data.Boolean' generalised implementations. This module
+-- can be used as a partial or complete Prelude replacement.
+--
+-- Also exports 'ifThenElse' for use with @RebindableSyntax@.
 ----------------------------------------------------------------------
 
 module Data.Boolean.Overload

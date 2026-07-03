@@ -9,17 +9,17 @@
 -- Module      :  Data.Boolean.Numbers
 -- Copyright   :  (c) Jan Bracker 2013
 -- License     :  BSD3
--- 
--- Maintainer  :  jbra@informatik.uni-kiel.de
+--
+-- Maintainer  :  PandaKitten96
 -- Stability   :  experimental
--- 
--- | A generalized version of the class hierarchy for numbers. All
--- functions that would break a potential deep embedding are removed
--- or generalized to support deep embeddings.
--- 
--- The class hierarchy for numeric types keeps as close as possible to the 
--- 'Prelude' hierarchy. A great part of the default implementation and comments
--- are copied and adopted from 'Prelude'.
+--
+-- A generalized version of the numeric class hierarchy from 'Prelude'.
+-- Functions that would break a potential deep embedding are removed or
+-- generalized so that deep embeddings are supported.
+--
+-- The class hierarchy keeps as close as possible to the 'Prelude' hierarchy.
+-- A large part of the default implementations and comments are adapted from
+-- 'Prelude'.
 --
 -------------------------------------------------------------------------
 

@@ -12,26 +12,24 @@
 ----------------------------------------------------------------------
 -- |
 -- Module      :  Data.Boolean
--- Copyright   :  (c) Conal Elliott 2009-2012
+-- Copyright   :  (c) Conal Elliott 2009-2013
 -- License     :  BSD3
 --
--- Maintainer  :  conal@conal.net
+-- Maintainer  :  PandaKitten96
 -- Stability   :  experimental
 --
--- Some classes for generalized boolean operations.
+-- Type classes for generalized boolean operations, allowing boolean-like
+-- behaviour to be abstracted over many types beyond plain 'Bool'.
+--
+-- This is useful when working with symbolic or lifted computations such as
+-- shader languages, DSLs, or applicative functors.
 --
 -- In this design, for if-then-else, equality and inequality tests, the
--- boolean type depends on the value type.
---
--- I also tried using a unary type constructor class.  The class doesn't work
--- for regular booleans, so generality is lost.  Also, we'd probably have
--- to wire class constraints in like: @(==*) :: Eq a => f Bool -> f a -> f
--- a -> f a@, which disallows situations needing additional constraints,
--- e.g., Show.
+-- boolean type depends on the value type via the 'BooleanOf' type family.
 --
 -- Starting with 0.1.0, this package uses type families.
 -- Up to version 0.0.2, it used MPTCs with functional dependencies.
--- My thanks to Andy Gill for suggesting & helping with the change.
+-- Thanks to Andy Gill for suggesting the type families change.
 
 ----------------------------------------------------------------------
 
